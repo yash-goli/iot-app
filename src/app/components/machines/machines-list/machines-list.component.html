@@ -1,0 +1,26 @@
+<div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white shadow-right">
+  <a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom justify-content-center">
+    <span class="fs-5 fw-semibold">Machines Status</span>
+  </a>
+  <div class="list-group list-group-flush border-bottom scrollarea">
+    <ng-container *ngFor="let machine of machinesList">
+      <div href="#" class="list-group-item list-group-item-action py-3 lh-sm" aria-current="true">
+        <div class="d-flex w-100 align-items-center justify-content-between">
+          <strong class="mb-1">{{machine.machine_type | titlecase}}</strong>
+          <small>Wed</small>
+        </div>
+        <div class="col-10 mb-1 small">
+          <h6 class="fs-6">
+            Status 
+            <ng-container [ngSwitch]="machine.status">
+              <span class="badge bg-primary" *ngSwitchCase="Status.RUNNING">{{machine.status}}</span>
+              <span class="badge bg-success" *ngSwitchCase="Status.FINISHED">{{machine.status}}</span>
+              <span class="badge bg-danger" *ngSwitchCase="Status.ERRORED">{{machine.status}}</span>
+              <span class="badge bg-secondary" *ngSwitchDefault>{{machine.status}}</span>
+            </ng-container>
+          </h6>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

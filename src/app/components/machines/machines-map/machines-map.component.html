@@ -1,0 +1,14 @@
+<google-map 
+  height="100%"
+  width="100%"
+  [zoom]="zoom"
+  #maps
+>
+  <map-marker 
+    *ngFor="let position of positions"
+    [clickable]="true"
+    [position]="position"
+    [options]="markerOptions"
+    (mapClick)="handleMapClick($event)"
+  ></map-marker>
+</google-map>

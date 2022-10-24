@@ -1,0 +1,9 @@
+.main {
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.header {
+  grid-row: 1/2;
+  z-index: 2;
+}
