@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ApiService } from 'src/app/services/api/api.service';
-import { MachineStatus, Status } from '../machines.model';
+import { MachineStatus } from '../machines.model';
 
 @Component({
   selector: 'app-machines-list',
@@ -11,10 +10,6 @@ export class MachinesListComponent implements OnInit {
 
   @Input()
   machinesList: MachineStatus[] = [];
-
-  public get Status(): typeof Status {
-    return Status; 
-  }
 
   constructor() { }
 

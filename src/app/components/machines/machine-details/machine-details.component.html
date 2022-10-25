@@ -1,0 +1,68 @@
+<div class="offcanvas-content">
+  <div class="offcanvas-header">
+    <h3 class="offcanvas-title">
+      {{machineDetails?.machine_type | titlecase}}
+      <ng-container [ngSwitch]="machineDetails?.status">
+        <span class="badge bg-primary fs-6" *ngSwitchCase="Status.RUNNING">{{machineDetails?.status}}</span>
+        <span class="badge bg-success fs-6" *ngSwitchCase="Status.FINISHED">{{machineDetails?.status}}</span>
+        <span class="badge bg-danger fs-6" *ngSwitchCase="Status.ERRORED">{{machineDetails?.status}}</span>
+        <span class="badge bg-secondary fs-6" *ngSwitchDefault>{{machineDetails?.status}}</span>
+      </ng-container>
+    </h3>
+    <button type="button" class="btn-close text-reset" aria-label="Close"
+      (click)="activeOffcanvas.dismiss('Cross click')"></button>
+  </div>
+  <div class="offcanvas-body">
+    <table class="table">
+      <tbody>
+        <tr>
+          <td>Floor</td>
+          <td>{{machineDetails?.floor}}</td>
+        </tr>
+        <tr>
+          <td>Install Date</td>
+          <td>{{machineDetails?.install_date | date: 'longDate'}}</td>
+        </tr>
+        <tr>
+          <td>Last Maintenance</td>
+          <td>{{machineDetails?.last_maintenance | date: 'medium'}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <h4>Events</h4>
+    <div class="mb-3 row">
+      <label for="filter" class="col-sm-4 col-form-label">Filter events:</label>
+      <div class="col-sm-8">
+        <select class="form-select" (change)="handleChange($event)">
+          <option value="" selected>select the year</option>
+          <ng-container *ngFor="let year of years">
+            <option [value]="year">{{year}}</option>
+          </ng-container>
+        </select>
+      </div>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Time Stamp</th>
+          <th scope="col">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let event of events">
+          <tr>
+            <td>{{event.timestamp | date: 'medium'}}</td>
+            <td>
+              <ng-container [ngSwitch]="event?.status">
+                <span class="badge bg-primary fs-6" *ngSwitchCase="Status.RUNNING">{{event?.status}}</span>
+                <span class="badge bg-success fs-6" *ngSwitchCase="Status.FINISHED">{{event?.status}}</span>
+                <span class="badge bg-danger fs-6" *ngSwitchCase="Status.ERRORED">{{event?.status}}</span>
+                <span class="badge bg-secondary fs-6" *ngSwitchDefault>{{event?.status}}</span>
+              </ng-container>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>

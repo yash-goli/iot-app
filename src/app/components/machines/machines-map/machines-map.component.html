@@ -5,10 +5,25 @@
   #maps
 >
   <map-marker 
-    *ngFor="let position of positions"
+    #maker="mapMarker"
+    *ngFor="let machine of machinesList"
     [clickable]="true"
-    [position]="position"
+    [position]="{lat: machine.latitude, lng: machine.longitude}"
     [options]="markerOptions"
-    (mapClick)="handleMapClick($event)"
+    (mapClick)="handleMapClick(maker, machine)"
   ></map-marker>
+  <map-info-window>
+    <h5 class="offcanvas-title">
+      {{infoWindowContent?.name | titlecase}}
+      <ng-container [ngSwitch]="infoWindowContent?.status">
+        <span class="badge bg-primary fs-6" *ngSwitchCase="Status.RUNNING">{{infoWindowContent?.status}}</span>
+        <span class="badge bg-success fs-6" *ngSwitchCase="Status.FINISHED">{{infoWindowContent?.status}}</span>
+        <span class="badge bg-danger fs-6" *ngSwitchCase="Status.ERRORED">{{infoWindowContent?.status}}</span>
+        <span class="badge bg-secondary fs-6" *ngSwitchDefault>{{infoWindowContent?.status}}</span>
+      </ng-container>
+    </h5>
+    <div class="d-flex justify-content-center py-2">
+      <button type="button" class="btn btn-primary btn-sm" (click)="openDetails(infoWindowContent.id)">Open Details</button>
+    </div>
+  </map-info-window>
 </google-map>

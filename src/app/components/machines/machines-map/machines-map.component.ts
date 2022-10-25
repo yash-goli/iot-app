@@ -1,6 +1,8 @@
 import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { GoogleMap } from '@angular/google-maps';
-import { MachineStatus } from '../machines.model';
+import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
+import { NgbOffcanvas, NgbOffcanvasConfig } from '@ng-bootstrap/ng-bootstrap';
+import { MachineDetailsComponent } from '../machine-details/machine-details.component';
+import { MachineStatus, Status } from '../machines.model';
 
 @Component({
   selector: 'app-machines-map',
@@ -12,6 +14,8 @@ export class MachinesMapComponent implements OnInit, OnChanges {
 
   @Input()
   machinesList: MachineStatus[] = [];
+  
+  @ViewChild(MapInfoWindow, { static: false }) infoWindow!: MapInfoWindow;
 
   zoom = 1;
 
@@ -24,7 +28,19 @@ export class MachinesMapComponent implements OnInit, OnChanges {
   @ViewChild('maps')
   maps!: GoogleMap;
 
-  constructor() { }
+  infoWindowContent = {
+    name: '',
+    status: '',
+    id: ''
+  }
+
+  public get Status(): typeof Status {
+    return Status; 
+  }
+
+  constructor(config: NgbOffcanvasConfig, private offcanvasService: NgbOffcanvas) { 
+    config.position = 'end';
+  }
 
   ngOnInit(): void {
   }
@@ -32,16 +48,21 @@ export class MachinesMapComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['machinesList']) {
       const bounds = new google.maps.LatLngBounds();
-      this.positions = this.machinesList.map(machine => {
+      this.machinesList.forEach(machine => {
         const { latitude: lat, longitude: lng } = machine;
         bounds.extend(new google.maps.LatLng(lat, lng));
-        return {lat, lng};
       });
       this.maps?.fitBounds(bounds);
     }
   }
 
-  handleMapClick(event: google.maps.MapMouseEvent) {
-    console.log(event);
+  handleMapClick(maker: any, machine: MachineStatus) {
+    this.infoWindowContent = {name: machine.machine_type, status: machine.status, id: machine.id};
+    this.infoWindow.open(maker);
+  }
+  
+  openDetails(id: string) {
+    const offcanvasRef = this.offcanvasService.open(MachineDetailsComponent);
+		(offcanvasRef.componentInstance as MachineDetailsComponent).id = id;
   }
 }

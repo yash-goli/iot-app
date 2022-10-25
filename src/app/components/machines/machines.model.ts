@@ -18,3 +18,16 @@ export enum Status {
   FINISHED = 'finished',
   ERRORED = 'errored'
 }
+
+export interface MachineEvent {
+  timestamp: string,
+  status: string,
+}
+
+export interface MachineDetails extends MachineStatus {
+  events: MachineEvent[];
+}
+
+export interface MachineDetailsData {
+  data: MachineDetails;
+}
